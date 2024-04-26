@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: diploma-app-deployment
+  namespace: diploma-app
+spec:
+  replicas: 2
+
+# Стратегия деплоя Rolling (постепенный, «накатываемый» деплой)
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+##################################################
+  selector:
+    matchLabels:
+      app: diploma-app-deployment
+
+  template:
+    metadata:
+      labels:
+        app: diploma-app-deployment
+    spec:
+      containers:
+      - name: diploma-app
+        image: 130958750/nginxapp:latest
+####### Вычислительные ресурсы
+        resources:
+########## Предельные ресурсы Pod = сумма предельных ресурсов всех контейнеров.
+          limits:
+            memory: 512Mi
+            cpu: "0.5"
+########## Запрошенные ресурсы Pod = сумма запрошенных ресурсов всех контейнеров;
+          requests:
+            memory: 256Mi
+            cpu: "0.25"
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: diploma-app-svc
+  namespace: diploma-app
+spec:
+  type: LoadBalancer
+  selector:
+    app: diploma-app-deployment
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

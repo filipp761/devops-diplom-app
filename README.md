@@ -1,1 +1,1 @@
-# devops-diplom-appzxczczx
+# devops-diplom-app

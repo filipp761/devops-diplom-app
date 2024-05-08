@@ -17,7 +17,7 @@ spec:
         app: app-web
     spec:
       containers:
-        - image: 130958750/nginxapp:v1.4
+        - image: 130958750/nginxapp:v1.5
           imagePullPolicy: IfNotPresent
           name: app-web
       terminationGracePeriodSeconds: 30
